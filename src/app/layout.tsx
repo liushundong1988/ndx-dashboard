@@ -28,11 +28,24 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col pt-16">
         <SiteHeader/>
-        <main className="pt-16">
-         {children}
-        </main>
+        <div className="border-b border-slate-100 bg-slate-50/80 backdrop-blur">
+        <div className="mx-auto max-w-5xl px-4 py-2 flex items-center justify-between text-xs text-slate-600">
+    
+        <div className="flex items-center gap-3">
+        <span>纳指</span>
+        <span className="font-medium text-slate-900">19,842</span>
+        <span className="text-green-600">+0.63%</span>
+        </div>
+
+        <div>情绪：中性</div>
+
+        <div>阶段：震荡</div>
+
+        </div>
+        </div>
+        {children}
       </body>
     </html>
   );
