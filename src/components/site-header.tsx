@@ -7,7 +7,7 @@ export default function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white">
+    <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-slate-200 bg-white">
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-3">
         <Link href="/" className="text-lg font-semibold tracking-tight text-slate-900">
           纳指100观察

@@ -153,40 +153,6 @@ const etfs: EtfItem[] = [
 
   return (
     <main className="min-h-screen bg-[#f5f5f7] text-slate-900">
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5 sm:px-6">
-        <div className="flex items-center gap-2.5 text-base font-semibold tracking-tight text-slate-900 sm:text-lg">
-          <BarChart3 size={16} strokeWidth={2.2} className="text-slate-900 opacity-90" />
-          <span>纳指100观察</span>
-        </div>
-
-        <nav className="hidden items-center gap-8 text-sm font-medium tracking-wide text-slate-600 md:flex">
-          <Link href="/" className="transition-colors duration-300 hover:text-black">
-            首页
-          </Link>
-          <Link
-            href="/constituents"
-            className="transition-colors duration-300 hover:text-black"
-          >
-            成分股
-          </Link>
-          <Link
-            href="/etf"
-            className="text-slate-950 transition-colors duration-300 hover:text-black"
-          >
-            国内ETF
-          </Link>
-          <Link 
-            href="/news" 
-            className="transition-colors duration-300 hover:text-black">
-            资讯
-          </Link>
-          <Link
-            href="/about"
-            className="transition-colors duration-300 hover:text-black">
-            关于
-          </Link>
-        </nav>
-      </header>
 
       <section className="px-4 pt-8 pb-10 sm:px-6 sm:pt-10 sm:pb-14">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
