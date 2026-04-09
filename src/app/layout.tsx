@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "纳指100观察",
+  title: "NDX100观察",
   description: "面向中国投资者的纳指结构化观察工具",
 };
 
