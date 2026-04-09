@@ -2,22 +2,6 @@
 
 import Link from "next/link";
 import { BarChart3 } from "lucide-react";
-import { ResponsiveContainer, AreaChart, Area } from "recharts";
-
-type MacroCardProps = {
-  label: string;
-  name: string;
-  value: string;
-  change: string;
-  changeColor: string;
-  data: { v: number }[];
-  gradientId: string;
-  stopColor: string;
-  strokeColor: string;
-  stopOpacity?: number;
-  status: string;
-  statusColor: string;
-};
 
 type StockItem = {
   symbol: string;
@@ -41,65 +25,9 @@ type MarketData = {
   stocks: StockItem[];
 };
 
-function MacroCard({
-  label,
-  name,
-  value,
-  change,
-  changeColor,
-  data,
-  gradientId,
-  stopColor,
-  strokeColor,
-  stopOpacity = 0.18,
-  status,
-  statusColor,
-}: MacroCardProps) {
-  return (
-    <div className="rounded-2xl border border-stone-200/80 bg-white px-5 py-4 outline-none transition-shadow hover:shadow-sm">
-      <div className="text-xs text-slate-400">{label}</div>
-      <div className="mt-1 text-sm font-medium text-slate-700">{name}</div>
-
-      <div className="mt-4 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
-        {value}
-      </div>
-
-      <div className={`mt-2 text-sm ${changeColor}`}>{change}</div>
-      <div className={`mt-1 text-xs ${statusColor}`}>{status}</div>
-
-      <div className="mt-4 overflow-hidden rounded-xl">
-        <div className="pointer-events-none h-14 w-full min-w-0">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={data}>
-              <defs>
-                <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={stopColor} stopOpacity={stopOpacity} />
-                  <stop offset="100%" stopColor={stopColor} stopOpacity={0.02} />
-                </linearGradient>
-              </defs>
-
-              <Area
-                type="monotone"
-                dataKey="v"
-                stroke={strokeColor}
-                strokeWidth={1.15}
-                fill={`url(#${gradientId})`}
-                dot={false}
-                activeDot={false}
-                isAnimationActive={false}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function HomeClient({ marketData }: { marketData: MarketData }) {
   const index = marketData.index;
-  const allStocks = marketData.stocks || [];
-  const topDrivers = allStocks.slice(0, 10);
+  const topDrivers = (marketData.stocks || []).slice(0, 10);
 
   const conclusion = {
     status: "适合观察",
@@ -109,31 +37,12 @@ export default function HomeClient({ marketData }: { marketData: MarketData }) {
   const formatSigned = (num: number, digits = 2) =>
     `${num >= 0 ? "+" : ""}${num.toFixed(digits)}%`;
 
-  const getContributionColor = (num: number) =>
+  const getColor = (num: number) =>
     num >= 0 ? "text-emerald-600" : "text-rose-600";
-
-  const vixTrend = [
-    { v: 23.5 }, { v: 20.8 }, { v: 21.6 }, { v: 19.7 }, { v: 20.9 },
-    { v: 18.6 }, { v: 19.8 }, { v: 19.1 }, { v: 19.4 }, { v: 18.2 },
-  ];
-
-  const yieldTrend = [
-    { v: 4.35 }, { v: 4.34 }, { v: 4.33 }, { v: 4.31 }, { v: 4.3 },
-    { v: 4.28 }, { v: 4.26 }, { v: 4.24 }, { v: 4.22 }, { v: 4.21 },
-  ];
-
-  const dxyTrend = [
-    { v: 105.0 }, { v: 104.9 }, { v: 104.8 }, { v: 104.8 }, { v: 104.7 },
-    { v: 104.6 }, { v: 104.5 }, { v: 104.4 }, { v: 104.2 }, { v: 104.3 },
-  ];
 
   return (
     <main className="min-h-screen bg-[#f5f5f7] text-slate-900">
-      <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 flex justify-center">
-        <div className="h-[260px] w-[520px] rounded-full bg-violet-300/18 blur-[100px]" />
-      </div>
-
-      <section className="mx-auto max-w-6xl px-4 pt-8 pb-10 sm:px-6 sm:pt-10 sm:pb-14">
+      <section className="mx-auto max-w-6xl px-4 pt-6 pb-8 sm:px-6 sm:pt-8 sm:pb-8">
         <div className="grid items-start gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:gap-10">
           <div>
             <div className="mb-3 text-[11px] tracking-[0.28em] text-slate-400 sm:text-xs">
@@ -260,14 +169,14 @@ export default function HomeClient({ marketData }: { marketData: MarketData }) {
 
                 <div className="flex items-center justify-between">
                   <span className="text-slate-500">涨跌</span>
-                  <span className={getContributionColor(stock.changesPercentage)}>
+                  <span className={getColor(stock.changesPercentage)}>
                     {formatSigned(stock.changesPercentage)}
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <span className="text-slate-500">贡献</span>
-                  <span className={`font-medium ${getContributionColor(stock.contribution ?? 0)}`}>
+                  <span className={`font-medium ${getColor(stock.contribution ?? 0)}`}>
                     {formatSigned(stock.contribution ?? 0)}
                   </span>
                 </div>
@@ -281,56 +190,41 @@ export default function HomeClient({ marketData }: { marketData: MarketData }) {
         </div>
       </section>
 
-      <section className="mx-auto mt-2 max-w-6xl px-4 sm:px-6">
+      <section className="mx-auto mt-4 max-w-6xl px-4 sm:px-6">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <MacroCard
-            label="恐慌指数"
-            name="VIX"
-            value="18.2"
-            change="-3.1%"
-            changeColor="text-emerald-600"
-            data={vixTrend}
-            gradientId="vixFill"
-            stopColor="#94a3b8"
-            strokeColor="rgba(71,85,105,0.68)"
-            stopOpacity={0.18}
-            status="中性"
-            statusColor="text-slate-400"
-          />
+          <div className="rounded-2xl border border-stone-200/80 bg-white px-5 py-4">
+            <div className="text-xs text-slate-400">恐慌指数</div>
+            <div className="mt-1 text-sm font-medium text-slate-700">VIX</div>
+            <div className="mt-4 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
+              18.2
+            </div>
+            <div className="mt-2 text-sm text-emerald-600">-3.1%</div>
+            <div className="mt-1 text-xs text-slate-400">中性</div>
+          </div>
 
-          <MacroCard
-            label="利率水平"
-            name="美债10Y"
-            value="4.21%"
-            change="+0.05%"
-            changeColor="text-rose-500"
-            data={yieldTrend}
-            gradientId="yieldFill"
-            stopColor="#f59e0b"
-            strokeColor="rgba(180,83,9,0.42)"
-            stopOpacity={0.12}
-            status="偏压制"
-            statusColor="text-orange-400"
-          />
+          <div className="rounded-2xl border border-stone-200/80 bg-white px-5 py-4">
+            <div className="text-xs text-slate-400">利率水平</div>
+            <div className="mt-1 text-sm font-medium text-slate-700">美债10Y</div>
+            <div className="mt-4 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
+              4.21%
+            </div>
+            <div className="mt-2 text-sm text-rose-500">+0.05%</div>
+            <div className="mt-1 text-xs text-orange-400">偏压制</div>
+          </div>
 
-          <MacroCard
-            label="美元强弱"
-            name="美元指数"
-            value="104.3"
-            change="-0.2%"
-            changeColor="text-emerald-600"
-            data={dxyTrend}
-            gradientId="dxyFill"
-            stopColor="#94a3b8"
-            strokeColor="rgba(100,116,139,0.38)"
-            stopOpacity={0.1}
-            status="偏压制"
-            statusColor="text-orange-400"
-          />
+          <div className="rounded-2xl border border-stone-200/80 bg-white px-5 py-4">
+            <div className="text-xs text-slate-400">美元强弱</div>
+            <div className="mt-1 text-sm font-medium text-slate-700">美元指数</div>
+            <div className="mt-4 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
+              104.3
+            </div>
+            <div className="mt-2 text-sm text-emerald-600">-0.2%</div>
+            <div className="mt-1 text-xs text-orange-400">偏压制</div>
+          </div>
         </div>
       </section>
 
-      <section className="mx-auto mt-12 max-w-6xl px-4 pb-16 sm:mt-16 sm:px-6 sm:pb-20">
+      <section className="mx-auto mt-8 max-w-6xl px-4 pb-8 sm:mt-12 sm:px-6 sm:pb-8">
         <div className="rounded-3xl border border-stone-200/80 bg-white p-5 sm:p-8">
           <div className="mb-6">
             <h2 className="text-xl font-semibold text-slate-900 sm:text-2xl">
@@ -372,21 +266,16 @@ export default function HomeClient({ marketData }: { marketData: MarketData }) {
         </div>
       </section>
 
-      <footer className="mt-24 border-t border-gray-200 pt-10 pb-6 px-6 text-center text-sm text-gray-500">
-        <div className="text-base font-medium text-gray-700 mb-2">纳指100观察</div>
-        <div className="mb-2">结构观察 · 非实时数据</div>
-        <div className="mb-4 text-xs text-gray-400">
-          数据更新：美股收盘后自动更新（北京时间每日 06:30）
-        </div>
 
-        <div className="text-xs text-gray-400 leading-relaxed max-w-xl mx-auto">
-          本页面仅用于结构观察与信息整理，不构成投资建议。
-          <br />
-          市场有风险，决策需谨慎。
+      <footer className="mt-10 border-t border-gray-200 py-6 px-6 text-center text-sm text-gray-500">
+        <div className="mb-2 text-xs text-gray-500">
+         结构观察：非实时数据
         </div>
+       <div className="text-xs text-gray-400 leading-relaxed">
+         数据更新：美股收盘后自动更新（北京时间每日 06:30）
+      </div>
+     </footer>
 
-        <div className="mt-6 text-xs text-gray-300">© 2026 liu shun dong</div>
-      </footer>
     </main>
   );
 }
